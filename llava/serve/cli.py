@@ -105,6 +105,17 @@ def main(args):
                 streamer=streamer,
                 use_cache=True)
 
+            masked_input_ids = model(
+                input_ids,
+                images=image_tensor,
+                image_sizes=[image_size],
+                do_sample=True if args.temperature > 0 else False,
+                temperature=args.temperature,
+                max_new_tokens=args.max_new_tokens,
+                streamer=streamer,
+                use_cache=True 
+            )  
+        print("Masked input IDs:", tokenizer.decode(masked_input_ids))        
         outputs = tokenizer.decode(output_ids[0]).strip()
         conv.messages[-1][-1] = outputs
 

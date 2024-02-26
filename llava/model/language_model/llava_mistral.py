@@ -68,7 +68,7 @@ class LlavaMistralForCausalLM(MistralForCausalLM, LlavaMetaForCausalLM):
         images: Optional[torch.FloatTensor] = None,
         image_sizes: Optional[List[List[int]]] = None,
         return_dict: Optional[bool] = None,
-    ) -> Union[Tuple, CausalLMOutputWithPast]:
+    ) -> Union[Tuple, CausalLMOutputWithPast, torch.Tensor]:
 
         if inputs_embeds is None:
             (
@@ -87,7 +87,7 @@ class LlavaMistralForCausalLM(MistralForCausalLM, LlavaMetaForCausalLM):
                 images,
                 image_sizes
             )
-
+        masked_input_ids = input_ids[attention_mask]
         return super().forward(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -99,7 +99,7 @@ class LlavaMistralForCausalLM(MistralForCausalLM, LlavaMetaForCausalLM):
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict
-        )
+        ), masked_input_ids
 
     @torch.no_grad()
     def generate(
