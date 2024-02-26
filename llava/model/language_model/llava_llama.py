@@ -88,7 +88,11 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 image_sizes
             )
 
-        return super().forward(
+        if attention_mask is not None:
+            masked_input_ids = input_ids[attention_mask]
+        else:
+            masked_input_ids = None
+        output_ids = super().forward(
             input_ids=input_ids,
             attention_mask=attention_mask,
             position_ids=position_ids,
@@ -100,6 +104,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict
         )
+        return output_ids, masked_input_ids
 
     @torch.no_grad()
     def generate(
