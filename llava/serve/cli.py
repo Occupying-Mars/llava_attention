@@ -95,7 +95,7 @@ def main(args):
         streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
 
         with torch.inference_mode():
-            masked_input_ids , output_ids = model.generate(
+            output = model.generate(
                 input_ids,
                 images=image_tensor,
                 image_sizes=[image_size],
@@ -103,9 +103,19 @@ def main(args):
                 temperature=args.temperature,
                 max_new_tokens=args.max_new_tokens,
                 streamer=streamer,
-                use_cache=True)
+                use_cache=True,
+                output_attentions=True
+            )
             
-        print("Masked input IDs:", tokenizer.decode(masked_input_ids))        
+        output_ids, attention_weights = output
+
+# Print the attention weights
+        if attention_weights is not None:
+            for layer_attention in attention_weights:
+                # Assuming you want to print the attention from the last layer
+                last_layer_attention = layer_attention[-1]
+                print("Attention weights:", last_layer_attention)    
+        #print("Masked input IDs:", tokenizer.decode(masked_input_ids))        
         outputs = tokenizer.decode(output_ids[0]).strip()
         conv.messages[-1][-1] = outputs
 
