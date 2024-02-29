@@ -110,6 +110,7 @@ def main(args):
         print("getting the output")    
         output_ids = output
         print("getting the attention 1")
+        print(output)
         attention_weights = output.attentions
         print("attention raw if 1 works", attention_weights)
 # Print the attention weights
