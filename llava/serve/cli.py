@@ -111,14 +111,14 @@ def main(args):
         output_ids = output
         print("getting the attention 1")
         print(output)
-        attention_weights = output.attentions
-        print("attention raw if 1 works", attention_weights)
+        #attention_weights = output.attentions
+        #print("attention raw if 1 works", attention_weights)
 # Print the attention weights
-        if attention_weights is not None:
-            for layer_attention in attention_weights:
-                # Assuming you want to print the attention from the last layer
-                last_layer_attention = layer_attention[-1]
-                print("Attention weights:", last_layer_attention)    
+        #if attention_weights is not None:
+        #    for layer_attention in attention_weights:
+        #        # Assuming you want to print the attention from the last layer
+         #       last_layer_attention = layer_attention[-1]
+         #3       print("Attention weights:", last_layer_attention)    
         #print("Masked input IDs:", tokenizer.decode(masked_input_ids))   
         print("attention weights 2")
         aa = model(
