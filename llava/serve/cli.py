@@ -16,7 +16,7 @@ from transformers import TextStreamer
 
 
 def load_image(image_file):
-    if image_file.startswith('http://') or image_file.startswith('https://'):
+    if image_file.startswith('http://') or imagse_file.startswith('https://'):
         response = requests.get(image_file)
         image = Image.open(BytesIO(response.content)).convert('RGB')
     else:
@@ -29,7 +29,7 @@ def main(args):
     disable_torch_init()
 
     model_name = get_model_name_from_path(args.model_path)
-    tokenizer, model, image_processor, context_len = load_pretrained_model(args.model_path, args.model_base, model_name, args.load_8bit, args.load_4bit, device=args.device)
+    tokenizer, model, image_processor, context_len = load_pretrained_model(args.model_path, args.model_base, model_name, args.load_8bit, args.load_4bit, attn_implementation="eager", device=args.device)
 
     if "llama-2" in model_name.lower():
         conv_mode = "llava_llama_2"
@@ -104,22 +104,41 @@ def main(args):
                 max_new_tokens=args.max_new_tokens,
                 streamer=streamer,
                 use_cache=True,
-                output_attentions=True
+                output_attentions=True,
+                return_dict=True
             )
-            
-        output_ids, attention_weights = output
-
+        print("getting the output")    
+        output_ids = output
+        print("getting the attention 1")
+        attention_weights = output.attentions
+        print("attention raw if 1 works", attention_weights)
 # Print the attention weights
         if attention_weights is not None:
             for layer_attention in attention_weights:
                 # Assuming you want to print the attention from the last layer
                 last_layer_attention = layer_attention[-1]
                 print("Attention weights:", last_layer_attention)    
-        #print("Masked input IDs:", tokenizer.decode(masked_input_ids))        
+        #print("Masked input IDs:", tokenizer.decode(masked_input_ids))   
+        print("attention weights 2")
+        aa = model(
+                input_ids,
+                images=image_tensor,
+                image_sizes=[image_size],
+                do_sample=True if args.temperature > 0 else False,
+                temperature=args.temperature,
+                max_new_tokens=args.max_new_tokens,
+                streamer=streamer,
+                use_cache=True,
+                output_attentions=True,
+                return_dict=True
+            ) 
+        print("att2", aa)
+        print("what") 
         outputs = tokenizer.decode(output_ids[0]).strip()
         conv.messages[-1][-1] = outputs
 
         if args.debug:
+            print("debug")
             print("\n", {"prompt": prompt, "outputs": outputs}, "\n")
 
 
