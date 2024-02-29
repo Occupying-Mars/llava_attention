@@ -126,13 +126,15 @@ def main(args):
                 images=image_tensor,
                 image_sizes=[image_size],
                 #do_sample=True if args.temperature > 0 else False,
-                temperature=args.temperature,
-                max_new_tokens=args.max_new_tokens,
-                streamer=streamer,
-                use_cache=True,
+                #temperature=args.temperature,
+                #max_new_tokens=args.max_new_tokens,
+                #streamer=streamer,
+                #use_cache=True,
                 output_attentions=True,
                 return_dict=True
             ) 
+        print(aa)
+        print(aa.attentions)
         print("att2", aa)
         print("what") 
         outputs = tokenizer.decode(output_ids[0]).strip()
