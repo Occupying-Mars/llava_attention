@@ -133,7 +133,8 @@ def main(args):
                 output_attentions=True,
                 return_dict=True
             ) 
-        print(aa)
+        #print(aa)
+        print("lets see")
         print(aa.attentions)
         print("att2", aa)
         print("what") 
