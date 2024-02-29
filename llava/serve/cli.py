@@ -95,22 +95,22 @@ def main(args):
         streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
 
         with torch.inference_mode():
-            output = model.generate(
-                input_ids,
-                images=image_tensor,
-                image_sizes=[image_size],
-                do_sample=True if args.temperature > 0 else False,
-                temperature=args.temperature,
-                max_new_tokens=args.max_new_tokens,
-                streamer=streamer,
-                use_cache=True,
-                output_attentions=True,
-                return_dict=True
-            )
-        print("getting the output")    
-        output_ids = output
-        print("getting the attention 1")
-        print(output)
+            #output = model.generate(
+            #    input_ids,
+            #    images=image_tensor,
+            #    image_sizes=[image_size],
+            #    do_sample=True if args.temperature > 0 else False,
+            #    temperature=args.temperature,
+            #    max_new_tokens=args.max_new_tokens,
+            #    streamer=streamer,
+            #    use_cache=True,
+            #    output_attentions=True,
+            #    return_dict=True
+            #)
+        #print("getting the output")    
+        #output_ids = output
+        #print("getting the attention 1")
+        #print(output)
         #attention_weights = output.attentions
         #print("attention raw if 1 works", attention_weights)
 # Print the attention weights
@@ -120,8 +120,8 @@ def main(args):
          #       last_layer_attention = layer_attention[-1]
          #3       print("Attention weights:", last_layer_attention)    
         #print("Masked input IDs:", tokenizer.decode(masked_input_ids))   
-        print("attention weights 2")
-        aa = model(
+            print("attention weights 2")
+            aa = model(
                 input_ids,
                 images=image_tensor,
                 image_sizes=[image_size],
@@ -137,12 +137,12 @@ def main(args):
         print(aa.attentions)
         print("att2", aa)
         print("what") 
-        outputs = tokenizer.decode(output_ids[0]).strip()
-        conv.messages[-1][-1] = outputs
+        #outputs = tokenizer.decode(output_ids[0]).strip()
+        #conv.messages[-1][-1] = outputs
 
         if args.debug:
             print("debug")
-            print("\n", {"prompt": prompt, "outputs": outputs}, "\n")
+        #    print("\n", {"prompt": prompt, "outputs": outputs}, "\n")
 
 
 if __name__ == "__main__":
