@@ -135,7 +135,18 @@ def main(args):
             ) 
         #print(aa)
         print("lets see")
-        print(aa.attentions)
+        for layer_attention in aa.attentions:
+            # Assuming you want to print the attention from the last layer
+            last_layer_attention = layer_attention[-1]
+            for head_attention in last_layer_attention:
+                # Flatten the attention weights for each head
+                token_attentions = head_attention.flatten().tolist()
+                # Decode the input_ids to tokens
+                tokens = tokenizer.convert_ids_to_tokens(input_ids.flatten().tolist())
+                # Pair each token with its attention weights and print them
+                for token, attention in zip(tokens, token_attentions):
+                    print(f"Token: {token}, Attention: {attention}")
+        #print(aa.attentions)
         print("att2", aa)
         print("what") 
         #outputs = tokenizer.decode(output_ids[0]).strip()
